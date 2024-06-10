@@ -21,7 +21,7 @@ func check_bytes(bytes []byte) error {
 		return errors.New("too large input")
 	}
 	if len(bytes) == 5 {
-		if bytes[2] != 0x05 && bytes[2] != 0x06 {
+		if bytes[1] != 0x05 && bytes[1] != 0x06 {
 			return errors.New("incorrect lenght for not writing operation")
 		}
 	}
