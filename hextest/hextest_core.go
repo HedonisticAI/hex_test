@@ -25,7 +25,7 @@ func check_bytes(bytes []byte) error {
 			return errors.New("incorrect lenght for not writing operation")
 		}
 	}
-	if bytes[2] > 0x06 || bytes[2] == 0x00 {
+	if bytes[1] > 0x07 || bytes[1] == 0x00 {
 		return errors.New("incorrect operation code")
 	}
 	return nil
@@ -58,17 +58,20 @@ func Process_Bytes(Request string) string {
 	return form_final_str(bytes)
 }
 func form_final_str(bytes []byte) string {
-	numbers := make([]int, len(bytes))
+	numbers := make([]int64, len(bytes))
 	for i := 0; i < len(bytes); i++ {
 		hex_str := fmt.Sprintf("%X", bytes[i])
-		num, _ := strconv.Atoi(hex_str)
+		num, err := strconv.ParseInt(hex_str, 16, 0)
+		if err != nil {
+			fmt.Print(err.Error())
+		}
 		numbers[i] = num
 	}
 	if len(bytes) == 5 {
-		return fmt.Sprintf("Адрес устройства: %d \n Код функции: %d \n Адрес ячейки памяти, куда идёт запись: %d \n Записываемое значение: %d CRC-8: %x", numbers[0], numbers[1], numbers[2], numbers[3], get_crc(bytes, 4, bytes[4]))
+		return fmt.Sprintf("Адрес устройства: %d \n Код функции: %d \n Адрес ячейки памяти, куда идёт запись: %d \n Записываемое значение: %d \n CRC-8: %x", numbers[0], numbers[1], numbers[2], numbers[3], get_crc(bytes, 3, bytes[4]))
 	}
 	if len(bytes) == 4 {
-		return fmt.Sprintf("Адрес устройства: %d  \n Код функции: %d \n Адрес ячейки памяти: %d  \n CRC-8: %x", numbers[0], numbers[1], numbers[2], get_crc(bytes, 3, bytes[3]))
+		return fmt.Sprintf("Адрес устройства: %d  \n Код функции: %d \n Адрес ячейки памяти: %d  \n CRC-8: %x", numbers[0], numbers[1], numbers[2], get_crc(bytes, 2, bytes[3]))
 	}
 	return ""
 }
