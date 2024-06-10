@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	fmt.Print(hextest.Process_Bytes(os.Args[2]))
+	fmt.Print(hextest.Process_Bytes(os.Args[1]))
 }

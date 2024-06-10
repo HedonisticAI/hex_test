@@ -17,7 +17,7 @@ func check_bytes(bytes []byte) error {
 	if len(bytes) < 4 {
 		return errors.New("too short input")
 	}
-	if len(bytes) < 5 {
+	if len(bytes) > 5 {
 		return errors.New("too large input")
 	}
 	if len(bytes) == 5 {
@@ -65,10 +65,10 @@ func form_final_str(bytes []byte) string {
 		numbers[i] = num
 	}
 	if len(bytes) == 5 {
-		return fmt.Sprintf("Адрес устройства: %d \n Код функции: %d \n Адрес ячейки памяти, куда идёт запись: %d \n Записываемое значение: %d CRC-8: %s", numbers[0], numbers[1], numbers[2], numbers[3], get_crc(bytes, 4, bytes[4]))
+		return fmt.Sprintf("Адрес устройства: %d \n Код функции: %d \n Адрес ячейки памяти, куда идёт запись: %d \n Записываемое значение: %d CRC-8: %x", numbers[0], numbers[1], numbers[2], numbers[3], get_crc(bytes, 4, bytes[4]))
 	}
 	if len(bytes) == 4 {
-		return fmt.Sprintf("Адрес устройства: %d  \n Код функции: %d \n Адрес ячейки памяти: %d  \n CRC-8: %s", numbers[0], numbers[1], numbers[2], get_crc(bytes, 3, bytes[3]))
+		return fmt.Sprintf("Адрес устройства: %d  \n Код функции: %d \n Адрес ячейки памяти: %d  \n CRC-8: %x", numbers[0], numbers[1], numbers[2], get_crc(bytes, 3, bytes[3]))
 	}
 	return ""
 }
@@ -77,7 +77,7 @@ func form_final_str(bytes []byte) string {
 // check - стартовый символ.
 // len - длина массива -1, так как последний символ у нас check и он играет другую роль
 // про табличную реализацию читал, но решил сделать таким образом.
-func get_crc(bytes []byte, len int, check byte) string {
+func get_crc(bytes []byte, len int, check byte) byte {
 	var crc byte
 	crc = check
 	n := 0
@@ -92,5 +92,5 @@ func get_crc(bytes []byte, len int, check byte) string {
 		}
 		n++
 	}
-	return string(crc)
+	return crc
 }

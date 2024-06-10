@@ -52,7 +52,7 @@ int Process_Array(unsigned char byte[SIZE]){
         printf("Адрес устройства: %ud  \n Код функции: %ud \n Адрес ячейки памяти: %ud  \n CRC-8: %ud", byte[0], byte[1], byte[2], get_crc(byte, SIZE, byte[SIZE-1]));
     }
     if (sizeof(byte) == 5){
-        printf("Адрес устройства: %ud  \n Код функции: %ud \n Адрес ячейки памяти: %ud %d \n Записываемое значение: %ud \n CRC-8: %ud", byte[0], byte[1], byte[2], byte[3], get_crc(byte)  );
+        printf("Адрес устройства: %ud  \n Код функции: %ud \n Адрес ячейки памяти: %ud %d \n Записываемое значение: %ud \n CRC-8: %ud", byte[0], byte[1], byte[2], byte[3], get_crc(byte, SIZE, byte[SIZE-1]) );
     }
     return 1;
 }
