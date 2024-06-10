@@ -1,10 +1,11 @@
 #include <stdio.h>
 //к сожалению спешил, так что ввод через хардкод переменной
-unsigned char data[] = {01, 03 ,01 ,53};
+#define SIZE 4
+unsigned char data[SIZE] = {01, 03 ,01 ,53};
 
 
 
-int check_array (unsigned char byte[]){
+int check_array (unsigned char byte[SIZE]){
     if (strlen(byte) == 0) {
         printf("empty input");
         return 0;
@@ -21,13 +22,13 @@ int check_array (unsigned char byte[]){
             return 0;
         }
     }
-    if (byte[2] > 6 || byte[2] == 0) {
+    if (byte[2] > 0x06 || byte[2] == 0x00) {
         printf ("incorrect operation code");
         return 0;
     }
     return 1;
 }
-unsigned char Crc8(unsigned char *data, unsigned int len, unsigned char check)
+unsigned char get_crc(unsigned char *data, unsigned int len, unsigned char check)
 {
     unsigned char crc = check;
     unsigned int i;
@@ -43,7 +44,19 @@ unsigned char Crc8(unsigned char *data, unsigned int len, unsigned char check)
     return crc;
 }
 
+int Process_Array(unsigned char byte[SIZE]){
+    if (check_array(byte) ==0 ){
+        return 0;
+    }
+    if (sizeof(byte) == 4){
+        printf("Адрес устройства: %ud  \n Код функции: %ud \n Адрес ячейки памяти: %ud  \n CRC-8: %ud", byte[0], byte[1], byte[2], get_crc(byte, SIZE, byte[SIZE-1]));
+    }
+    if (sizeof(byte) == 5){
+        printf("Адрес устройства: %ud  \n Код функции: %ud \n Адрес ячейки памяти: %ud %d \n Записываемое значение: %ud \n CRC-8: %ud", byte[0], byte[1], byte[2], byte[3], get_crc(byte)  );
+    }
+    return 1;
+}
+
 int main (){
-    printf("%d",check_array(data));
     return 0;
 }
